@@ -1,0 +1,50 @@
+{
+  "name": "linkedin-tracker",
+  "productName": "LinkedIn Tracker",
+  "version": "1.0.0",
+  "description": "Keep a log of your LinkedIn conversations: contacts, sent and received messages with images, seen markers, several accounts.",
+  "main": "main.js",
+  "author": "James Clarke",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^44.9.3",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.jamesdavidclarke.linkedintracker",
+    "productName": "LinkedIn Tracker",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "db.js",
+      "cryptfile.js",
+      "preload.js",
+      "src/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "LinkedIn Tracker"
+    },
+    "portable": {
+      "artifactName": "LinkedInTracker-Portable-${version}.exe"
+    }
+  }
+}

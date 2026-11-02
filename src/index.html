@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: avatar: attachment:">
+  <title>LinkedIn Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="appearance.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2ZM6 9h12v2H6V9Zm8 5H6v-2h8v2Zm4-6H6V6h12v2Z"/></svg></span>
+      <span class="brand-name">LinkedIn Tracker</span>
+    </div>
+    <div class="topbar-actions">
+      <span class="stats" id="stats"></span>
+      <div class="account-switch-wrap">
+        <button type="button" class="account-switch" id="accountSwitch" aria-haspopup="menu" aria-expanded="false"></button>
+        <div class="account-menu hidden" id="accountMenu" role="menu"></div>
+      </div>
+      <button class="icon-btn" id="btnSettings" title="Settings (Ctrl+,)">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Zm7.43-2.53a7.8 7.8 0 0 0 0-1.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.68-.97l-.36-2.54A.5.5 0 0 0 14.13 2h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.6.24-1.17.57-1.68.97l-2.39-.96a.5.5 0 0 0-.6.22L2.84 8.51a.5.5 0 0 0 .12.64l2.03 1.58a7.8 7.8 0 0 0 0 1.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.3.6.22l2.39-.96c.51.4 1.07.73 1.68.97l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.6-.24 1.17-.57 1.68-.97l2.39.96c.22.08.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-body">
+  <div class="views">
+  <section class="view" id="view-linkedin">
+  <main class="layout">
+    <section class="card messaging">
+      <aside class="sidebar">
+        <div class="sidebar-head">
+          <h1>Messaging</h1>
+          <button class="icon-btn" id="btnNewContact" title="New contact (Ctrl+N)">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M17 13.75V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h6.25l-2 2H4v11h11v-4.25l2-2ZM21.71 4.71l-2.42-2.42a1 1 0 0 0-1.41 0L9 11.17V15h3.83l8.88-8.88a1 1 0 0 0 0-1.41ZM12 13h-1v-1l6.5-6.5 1 1L12 13Z"/></svg>
+          </button>
+        </div>
+
+        <div class="search-row">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M14.56 12.44 11.3 9.18a5.51 5.51 0 1 0-2.12 2.12l3.26 3.26a1.5 1.5 0 1 0 2.12-2.12ZM3 6.5A3.5 3.5 0 1 1 6.5 10 3.5 3.5 0 0 1 3 6.5Z" transform="translate(3 3)"/></svg>
+            <input id="search" type="search" placeholder="Search messages" autocomplete="off" spellcheck="false">
+          </div>
+          <select id="searchField" title="What to search in">
+            <option value="all">Everything</option>
+            <option value="name">Name</option>
+            <option value="url">LinkedIn URL</option>
+            <option value="nationality">Country</option>
+            <option value="content">Chat content</option>
+          </select>
+        </div>
+
+        <div class="filters" id="filters">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="awaiting">Awaiting reply</button>
+          <button class="chip" data-filter="seen">Seen, no reply</button>
+          <button class="chip" data-filter="replied">Replied</button>
+          <button class="chip" data-filter="empty">No messages</button>
+        </div>
+
+        <ul class="contact-list" id="contactList"></ul>
+      </aside>
+
+      <section class="thread">
+        <div class="thread-empty" id="threadEmpty">
+          <div class="empty-art">
+            <svg viewBox="0 0 64 64" width="96" height="96"><rect x="6" y="10" width="40" height="30" rx="6" fill="#dce6f1"/><path d="M14 40v10l10-10" fill="#dce6f1"/><rect x="20" y="22" width="38" height="28" rx="6" fill="#1d5bd6"/><path d="M50 50v8l-8-8" fill="#1d5bd6"/><circle cx="31" cy="36" r="2.5" fill="#fff"/><circle cx="39" cy="36" r="2.5" fill="#fff"/><circle cx="47" cy="36" r="2.5" fill="#fff"/></svg>
+          </div>
+          <h2 id="emptyTitle">Keep track of your LinkedIn conversations</h2>
+          <p id="emptyText">Add a contact, then paste in each message you send and each reply you receive. Next time they write back, you'll know exactly what was said.</p>
+          <button class="btn primary" id="btnEmptyNew">Add a contact</button>
+        </div>
+
+        <div class="thread-main hidden" id="threadMain">
+          <div class="thread-header" id="threadHeader"></div>
+          <div class="messages" id="messages"></div>
+
+          <form class="composer" id="composer" autocomplete="off">
+            <div class="composer-resize" id="composerResize" title="Drag to resize the message box · double-click to reset">
+              <span></span>
+            </div>
+            <div class="composer-top">
+              <div class="segmented" id="directionToggle" role="radiogroup" aria-label="Who wrote this message">
+                <button type="button" data-dir="out" class="active" title="Alt+1">I sent</button>
+                <button type="button" data-dir="in" title="Alt+2">They replied</button>
+              </div>
+              <label class="when">
+                <span>Date &amp; time</span>
+                <span class="clock-tag hidden" id="clockTag" title="App clock — change it in Settings"></span>
+                <input type="datetime-local" id="composerDate">
+              </label>
+              <button type="button" class="link-btn" id="btnNow" title="Set to current time">Now</button>
+              <span class="as-account hidden" id="asAccount"></span>
+            </div>
+            <div class="tray hidden" id="composerTray"></div>
+            <textarea id="composerText" rows="3" placeholder="Paste or write the message you sent…"></textarea>
+            <div class="composer-bottom">
+              <div class="composer-tools">
+                <button type="button" class="icon-btn" id="btnAttach" title="Attach image (or paste / drop one)">
+                  <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M19 4H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm1 13a1 1 0 0 1-1 1H5.41l7.3-7.29a1 1 0 0 1 1.41 0L20 16.59Zm0-3.24-4.46-4.46a3 3 0 0 0-4.24 0L4 16.59V7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1ZM8 7.5A1.5 1.5 0 1 0 9.5 9 1.5 1.5 0 0 0 8 7.5Z"/></svg>
+                </button>
+                <input type="file" id="attachFile" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" multiple hidden>
+                <span class="hint">Ctrl + Enter to add · paste or drop images</span>
+              </div>
+              <button type="submit" class="btn primary small" id="btnAdd" disabled>Add message</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </section>
+  </main>
+  </section>
+  </div>
+  </div>
+
+  <dialog id="modal">
+    <form method="dialog" id="modalForm" novalidate>
+      <header class="modal-head">
+        <h2 id="modalTitle"></h2>
+        <button type="button" class="icon-btn" id="modalClose" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M13.42 12 20 18.58 18.58 20 12 13.42 5.42 20 4 18.58 10.58 12 4 5.42 5.42 4 12 10.58 18.58 4 20 5.42Z"/></svg>
+        </button>
+      </header>
+      <div class="modal-body" id="modalBody"></div>
+      <footer class="modal-foot">
+        <button type="button" class="btn secondary" id="modalCancel">Cancel</button>
+        <button type="submit" class="btn primary" id="modalOk">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="lightbox hidden" id="lightbox" role="dialog" aria-label="Image viewer">
+    <div class="lightbox-bar">
+      <span class="lightbox-info" id="lightboxInfo"></span>
+      <div class="lightbox-actions">
+        <button type="button" class="btn ghost small" id="lightboxCopy">Copy image</button>
+        <button type="button" class="btn ghost small" id="lightboxSave">Save as…</button>
+        <button type="button" class="icon-btn" id="lightboxClose" aria-label="Close" title="Close (Esc)">
+          <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M13.42 12 20 18.58 18.58 20 12 13.42 5.42 20 4 18.58 10.58 12 4 5.42 5.42 4 12 10.58 18.58 4 20 5.42Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <button type="button" class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+    <img id="lightboxImg" alt="">
+    <button type="button" class="lightbox-nav next" id="lightboxNext" aria-label="Next image">›</button>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <datalist id="nationalityList"></datalist>
+
+  <script src="countries.js"></script>
+  <script src="renderer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
