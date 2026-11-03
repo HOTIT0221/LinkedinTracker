@@ -15,8 +15,8 @@ its own data.
 
 ## Use it
 
-- **Install:** run `dist\LinkedIn Tracker Setup 1.0.0.exe`, or
-- **No install:** run `dist\LinkedInTracker-Portable-1.0.0.exe`.
+- **Install:** run `dist\LinkedIn Tracker Setup 1.0.1.exe`, or
+- **No install:** run `dist\LinkedInTracker-Portable-1.0.1.exe`.
 
 `Ctrl+N` adds a contact, `Ctrl+F` searches, `Ctrl+Enter` adds the message, `Alt+1` / `Alt+2` switch
 between "I sent" and "They replied", `Alt+↑` / `Alt+↓` move between conversations.

@@ -1,7 +1,7 @@
 {
   "name": "linkedin-tracker",
   "productName": "LinkedIn Tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Keep a log of your LinkedIn conversations: contacts, sent and received messages with images, seen markers, several accounts.",
   "main": "main.js",
   "author": "James Clarke",
